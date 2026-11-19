@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Topbar from '../components/Topbar.astro';
+import Hero from '../components/Hero.astro';
+import Film from '../components/Film.astro';
+import Manifesto from '../components/Manifesto.astro';
+import Experiencia from '../components/Experiencia.astro';
+import Contacto from '../components/Contacto.astro';
+import { films } from '../data/films';
+import projects from '../data/projects.js';
+import { imageUrl, resolveAssets } from '../lib/assets';
+
+// Los casos de estudio viajan al cliente como JSON, ya con las URLs optimizadas.
+const caseStudies = JSON.stringify(await resolveAssets(projects)).replace(/</g, '\\u003c');
+const ogImage = await imageUrl('apolo-22.jpg');
+---
+<Base
+  title="Sofia Cabeza — Portafolio"
+  description="Sofia Cabeza Acevedo, diseñadora y gestora de moda en Bogotá. Desarrollo de producto, fichas técnicas y comunicación visual."
+  ogImage={ogImage}
+>
+  <Topbar />
+  <Hero />
+  <Film film={films.apollo} />
+  <Manifesto />
+  <Film film={films.littleDreams} />
+  <Film film={films.lostOfDelicacy} />
+  <Experiencia />
+  <Contacto />
+
+  <script type="application/json" id="cs-data" set:html={caseStudies} />
+  <script>
+    import '../scripts/drape.js';
+    import '../scripts/page.js';
+    import '../scripts/case-study.js';
+    import '../scripts/i18n.js';
+  </script>
+</Base>

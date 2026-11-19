@@ -1,0 +1,29 @@
+---
+import type { Film } from '../data/films';
+import { imageUrl } from '../lib/assets';
+
+interface Props { film: Film }
+const { film } = Astro.props;
+const src = await imageUrl(film.imagen);
+const bgStyle = [
+  `background-image:url('${src}')`,
+  `background-color:${film.fondo}`,
+  film.posicion && `background-position:${film.posicion}`,
+].filter(Boolean).join(';');
+---
+<section
+  class:list={['film', 'cs-trigger', { 'label-bold': film.etiquetaNegrita }]}
+  data-cs={film.cs}
+  data-film
+  id={film.id}
+>
+  <div class="bg" style={bgStyle}></div>
+  <div class="wrap">
+    <div class="label"><span>{film.etiqueta[0]}</span><span>{film.etiqueta[1]}</span></div>
+    <p class="quote display it">{film.cita}</p>
+    <div class="footer-line">
+      <span>{film.temporada}</span>
+      <span>{film.indice}</span>
+    </div>
+  </div>
+</section>

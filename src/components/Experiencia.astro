@@ -1,0 +1,27 @@
+---
+import { experiencia } from '../data/experiencia';
+
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<section class="industria" id="industria">
+  <div class="wrap">
+    <div class="section-mark reveal">
+      <div class="left">
+        <span class="num">03</span>
+        <h2 class="display">Experiencia <span class="it">—</span> profesional.</h2>
+      </div>
+      <div class="right">Trayectoria en marcas de moda, desde sastrería de lujo a la medida hasta dotación corporativa, beachwear y ropa infantil. Orden del más reciente al primero.</div>
+    </div>
+    <div class="houses">
+      {experiencia.map((h, i) => (
+        <article class="house" data-cs={h.cs}>
+          <span class="num">{pad(i + 1)}</span>
+          <h3 class="name display">{h.nombre}{h.nombreIt && ' '}{h.nombreIt && <span class="it">{h.nombreIt}</span>}</h3>
+          <div class="role"><b>{h.rol}</b>{h.descripcion}</div>
+          <span class="yr">{h.periodo}</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17 17 7M9 7h8v8"></path></svg></span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

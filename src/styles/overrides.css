@@ -1,0 +1,16 @@
+/* Ajustes hechos a mano en Claude Design (valor final de cada regla).
+   Van al final para ganarle a global.css y case-study.css. */
+
+/* El body del diseño quedó en este tono y en Times New Roman. */
+body { background-color: rgb(237, 223, 199); font-family: "Times New Roman"; }
+
+.cs-slide .body { font-family: "Cormorant Garamond" !important; }
+[aria-label="Siguiente"], [aria-label="Next"] { color: rgb(9, 9, 9) !important; }
+[aria-label="Anterior"], [aria-label="Previous"] { color: rgb(11, 11, 11) !important; }
+.cs-slide > :is(h1,h2,h3,h4,h5,h6) { background-color: rgba(237, 232, 223, 0.055) !important; }
+.ld-photos > div:nth-child(1) > :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) { background-color: rgba(237, 232, 223, 0.03) !important; color: rgb(248, 247, 245) !important; }
+.ld-photos > div:nth-child(2) > :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) { background-color: rgba(237, 232, 223, 0.055) !important; color: rgb(246, 243, 240) !important; }
+div:nth-child(6) .ficha-flat > .flat-label { color: rgba(138, 128, 116, 0.965) !important; }
+.cs-meta-grid > div:nth-child(1) > span:nth-child(2) { font-family: "Times New Roman" !important; }
+.cs-meta-grid :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) > :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) { font-family: "Times New Roman" !important; font-size: 6px !important; }
+.concepto :is(h1,h2,h3,h4,h5,h6) { font-size: 40px !important; }

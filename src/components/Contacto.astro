@@ -1,0 +1,63 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const arrow = 'M7 17 17 7M9 7h8v8';
+const download = 'M12 4v12m0 0-5-5m5 5 5-5M4 20h16';
+const links = [
+  { k: 'Correo', v: 'sofia.cabezaacevedo@gmail.com', href: 'mailto:sofia.cabezaacevedo@gmail.com', icon: arrow },
+  { k: 'Instagram', v: '@fia__18', href: 'https://instagram.com/fia__18', icon: arrow, external: true },
+  { k: 'Hoja de vida · Español', v: 'Descargar PDF', href: `${base}assets/CV_Sofia_Cabeza_Acevedo_ES.pdf`, icon: download, file: true },
+  { k: 'Curriculum vitae · English', v: 'Download PDF', href: `${base}assets/CV_Sofia_Cabeza_Acevedo_EN.pdf`, icon: download, file: true },
+];
+const year = 2026;
+---
+<section class="atelier" id="atelier">
+  <svg class="drape" id="drape" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+  <div class="wrap">
+    <div class="section-mark reveal">
+      <div class="left">
+        <span class="num" style="color:rgba(255,255,255,.45);">04</span>
+        <h2 class="display">Contacto.</h2>
+      </div>
+      <div class="right">
+        Trabajo de forma online y en proyectos B2B. Para colaboraciones o encargos, escríbeme directamente. Respondo siempre en menos de 48 horas.
+      </div>
+    </div>
+
+    <div class="contact-grid reveal">
+      <div>
+        <p class="display">
+          Diseñemos<br />
+          <span class="display it">algo juntos</span>.
+        </p>
+        <div class="links">
+          {links.map((l) => (
+            <a
+              href={l.href}
+              target={l.external || l.file ? '_blank' : undefined}
+              rel={l.external || l.file ? 'noopener' : undefined}
+              download={l.file ? '' : undefined}
+            >
+              <span><span class="k">{l.k}</span>{l.v}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d={l.icon} /></svg>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <aside class="contact-side">
+        <p class="eyebrow">— Modalidad</p>
+        <p class="display it">Online · B2B</p>
+        <p>Presencial en Bogotá, Colombia</p>
+        <p style="margin-top:32px;">
+          <span class="eyebrow" style="display:block;margin-bottom:8px;">Horario</span>
+          Lunes a viernes &mdash; 9:00 a 18:00
+        </p>
+      </aside>
+    </div>
+
+    <footer class="site-footer">
+      <span>© {year} · Sofia Cabeza Acevedo</span>
+      <span>Diseñadora y gestora de moda · Bogotá, Colombia</span>
+    </footer>
+  </div>
+</section>
