@@ -1,7 +1,8 @@
 # Portafolio · Sofia Cabeza Acevedo
 
-Sitio estático hecho con [Astro](https://astro.build). Se publica en GitHub Pages en
-https://sofiacabezaacevedo-web.github.io/portafolio/ cada vez que se sube un cambio a `main`.
+Sitio estático hecho con [Astro](https://astro.build). Se publica en Vercel, conectado a este
+repositorio: cada push a `main` despliega el dominio propio. También queda una copia en GitHub Pages
+(https://sofiacabezaacevedo-web.github.io/portafolio/).
 
 ## Comandos
 
@@ -10,7 +11,7 @@ Requiere Node 22.23 o superior y pnpm.
 | Comando        | Qué hace                                            |
 | -------------- | --------------------------------------------------- |
 | `pnpm install` | Instala las dependencias                            |
-| `pnpm dev`     | Servidor local en http://localhost:4321/portafolio/ |
+| `pnpm dev`     | Servidor local en http://localhost:4321/            |
 | `pnpm build`   | Genera el sitio final en `dist/`                    |
 | `pnpm preview` | Sirve `dist/` para revisarlo antes de publicar      |
 | `pnpm check`   | Revisa tipos y errores en los componentes           |
@@ -35,9 +36,8 @@ En los datos se citan como `'assets/<archivo>'`; si un archivo no existe, el bui
 La traducción funciona por texto exacto: si se cambia un texto en español, hay que cambiar
 también su llave en `src/i18n/en.json` o esa frase se queda en español en la versión en inglés.
 
-## Primera publicación
+## Publicación y rutas
 
-En el repositorio de GitHub, ir a Settings → Pages y en "Source" elegir **GitHub Actions**.
-Desde ahí cada push a `main` publica solo (workflow en `.github/workflows/deploy.yml`).
-
-Para usar un dominio propio, cambiar `site` en `astro.config.mjs` y quitar `base`.
+El sitio se compila para la raíz del dominio. GitHub Pages lo sirve en `/portafolio/`, así que su
+workflow (`.github/workflows/deploy.yml`) compila con `BASE_PATH=/portafolio`. Si se deja de usar
+GitHub Pages, se puede borrar ese workflow y apagar Pages en Settings → Pages.
