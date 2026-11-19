@@ -493,3 +493,10 @@ nav.menu a:hover::after { left: 0; right: 0; }
 /* ——— componentes (antes eran estilos en línea) ——— */
 .film.cs-trigger { cursor: pointer; }
 .film.label-bold .label span { font-weight: 700; }
+
+/* ——— celular: la lista de experiencia gana ancho para el texto ——— */
+@media (max-width: 720px) {
+  .house { grid-template-columns: 28px minmax(0, 1fr) 40px; column-gap: 14px; padding: 36px 0; }
+  .house .arrow { width: 40px; height: 40px; }
+  .house:hover .name { transform: none; }
+}

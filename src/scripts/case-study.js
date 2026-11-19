@@ -19,6 +19,11 @@
       <button class="cs-nav next" aria-label="Siguiente">›</button>
       <div class="cs-track"></div>
     </div>
+    <nav class="cs-dock" aria-label="Navegación del proyecto">
+      <button class="cs-dock-btn prev" type="button" aria-label="Anterior">‹</button>
+      <span class="cs-count"></span>
+      <button class="cs-dock-btn next" type="button" aria-label="Siguiente">›</button>
+    </nav>
   `;
   document.body.appendChild(overlay);
 
@@ -28,6 +33,11 @@
   const $track = overlay.querySelector('.cs-track');
   const $prev = overlay.querySelector('.cs-nav.prev');
   const $next = overlay.querySelector('.cs-nav.next');
+  const $stage = overlay.querySelector('.cs-stage');
+  const $dockPrev = overlay.querySelector('.cs-dock-btn.prev');
+  const $dockNext = overlay.querySelector('.cs-dock-btn.next');
+  const $count = overlay.querySelector('.cs-count');
+  const pad2 = (n) => String(n).padStart(2, '0');
 
   let current = 0;
   let totalSlides = 0;
@@ -475,6 +485,7 @@
                           `).join('')}
                         </div>
                         ${v.label ? `<figcaption>${v.label}</figcaption>` : ''}
+                        ${(v.anchors || []).length ? `<ol class="flat-legend">${v.anchors.map(a => `<li>${a.label}</li>`).join('')}</ol>` : ''}
                       </figure>
                     `).join('')}
                   </div>
@@ -533,6 +544,9 @@
     [...$progress.children].forEach((c, i) => c.classList.toggle('active', i === current));
     $prev.toggleAttribute('disabled', current === 0);
     $next.toggleAttribute('disabled', current === totalSlides - 1);
+    $dockPrev.toggleAttribute('disabled', current === 0);
+    $dockNext.toggleAttribute('disabled', current === totalSlides - 1);
+    $count.textContent = `${pad2(current + 1)} / ${pad2(totalSlides)}`;
     bindFlips();
   }
 
@@ -616,22 +630,64 @@
     if (!renderProject(key)) return;
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    // Una entrada en el historial para que el botón "atrás" del celular cierre el proyecto.
+    if (!(history.state && history.state.cs)) history.pushState({ cs: key }, '');
   }
-  function close() {
+  function close(fromHistory) {
+    if (!overlay.classList.contains('open')) return;
     overlay.classList.remove('open');
     document.body.style.overflow = '';
+    if (fromHistory !== true && history.state && history.state.cs) history.back();
+  }
+  window.addEventListener('popstate', () => close(true));
+
+  function go(i) {
+    current = Math.max(0, Math.min(totalSlides - 1, i));
+    update();
   }
 
-  $prev.addEventListener('click', () => { current = Math.max(0, current - 1); update(); });
-  $next.addEventListener('click', () => { current = Math.min(totalSlides - 1, current + 1); update(); });
+  $prev.addEventListener('click', () => go(current - 1));
+  $next.addEventListener('click', () => go(current + 1));
+  $dockPrev.addEventListener('click', () => go(current - 1));
+  $dockNext.addEventListener('click', () => go(current + 1));
   overlay.querySelector('.cs-close').addEventListener('click', close);
 
   document.addEventListener('keydown', (e) => {
     if (!overlay.classList.contains('open')) return;
-    if (e.key === 'ArrowRight') { current = Math.min(totalSlides - 1, current + 1); update(); }
-    if (e.key === 'ArrowLeft')  { current = Math.max(0, current - 1); update(); }
+    if (e.key === 'ArrowRight') go(current + 1);
+    if (e.key === 'ArrowLeft') go(current - 1);
     if (e.key === 'Escape') close();
   });
+
+  // Deslizar a los lados cambia de lámina. Se ignora si el gesto empieza dentro de algo
+  // que se desplaza horizontalmente (una tabla, por ejemplo) y aún no llegó a su borde.
+  function scrollsSideways(el, dx) {
+    for (; el && el !== $stage; el = el.parentElement) {
+      const ox = getComputedStyle(el).overflowX;
+      if ((ox === 'auto' || ox === 'scroll') && el.scrollWidth > el.clientWidth + 2) {
+        const atStart = el.scrollLeft <= 0;
+        const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+        if (dx < 0 ? !atEnd : !atStart) return true;
+      }
+    }
+    return false;
+  }
+  let touch0 = null;
+  $stage.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    touch0 = e.touches.length === 1 ? { x: t.clientX, y: t.clientY, el: e.target } : null;
+  }, { passive: true });
+  $stage.addEventListener('touchend', (e) => {
+    if (!touch0) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touch0.x;
+    const dy = t.clientY - touch0.y;
+    const start = touch0.el;
+    touch0 = null;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (scrollsSideways(start, dx)) return;
+    go(current + (dx < 0 ? 1 : -1));
+  }, { passive: true });
 
   // bind triggers
   document.addEventListener('click', (e) => {

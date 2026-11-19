@@ -1,0 +1,155 @@
+/* Casos de estudio en celular (hasta 720 px).
+   En escritorio nada de esto aplica, salvo ocultar la barra inferior y la leyenda. */
+.cs-dock,
+.flat-legend { display: none; }
+
+@media (max-width: 720px) {
+  /* ——— barra superior: título en una línea, X siempre visible, progreso como línea ——— */
+  .cs-bar { position: relative; padding: 12px 14px 14px 20px; gap: 12px; }
+  .cs-bar .cs-title {
+    flex: 1; min-width: 0;
+    flex-direction: column; align-items: flex-start; gap: 3px;
+    font-size: 20px; line-height: 1.15;
+  }
+  .cs-bar .cs-title .cs-name,
+  .cs-bar .cs-title .cs-tag { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cs-bar .cs-title .cs-tag { font-size: 9px; letter-spacing: .2em; }
+  .cs-close { flex: 0 0 auto; width: 40px; height: 40px; font-size: 16px; }
+  .cs-progress { position: absolute; left: 0; right: 0; bottom: -1px; gap: 3px; }
+  .cs-progress span,
+  .cs-progress span.active { flex: 1; width: auto; height: 2px; }
+
+  /* ——— navegación: fuera las flechas flotantes, barra inferior con contador ——— */
+  .cs-nav { display: none; }
+  .cs-dock {
+    display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-soft);
+    background: var(--paper);
+  }
+  .cs-dock-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--paper);
+    display: grid; place-items: center;
+    font-size: 18px; color: var(--ink); cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s, opacity .2s;
+  }
+  .cs-dock-btn:active { background: var(--paper-2); }
+  .cs-dock-btn[disabled] { opacity: .25; pointer-events: none; }
+  .cs-count {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .22em;
+    color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+
+  /* ——— láminas ——— */
+  .cs-slide { overflow-x: hidden; }
+  .cs-slide img { max-width: 100%; }
+
+  /* portada infantil: las manchas no tapan el texto */
+  .cs-slide.cover.playful .splash.s2,
+  .cs-slide.cover.playful .splash.s5 { display: none; }
+  .cs-slide.cover.playful .splash { width: 64px !important; }
+
+  /* concepto: el texto se lee completo (antes quedaba cortado en un recuadro con scroll propio) */
+  .cs-slide.concepto { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto !important; align-content: start; align-items: start; }
+  .cs-slide.concepto > div:first-child { max-height: none !important; overflow: visible !important; padding-right: 0; align-self: start !important; }
+  .cs-slide.concepto:has(.cnpt-type) { padding-left: 24px !important; padding-right: 24px !important; }
+  .cs-slide.concepto .cnpt-cols .body { columns: auto; max-height: none; overflow: visible; }
+
+  /* movimiento: animación, pie y texto uno debajo del otro, sin encimarse */
+  .cs-slide.movimiento { display: block; }
+  .cs-slide.movimiento .mv-grid { display: flex !important; flex-direction: column; gap: 28px; height: auto !important; }
+  .cs-slide.movimiento .mv-media { height: auto !important; display: flex; flex-direction: column; gap: 12px; }
+  .cs-slide.movimiento .mv-frame { flex: none !important; width: 100%; height: auto !important; aspect-ratio: auto !important; }
+  .cs-slide.movimiento .mv-frame img { width: 100%; height: auto !important; object-fit: contain; }
+  .cs-slide.movimiento .mv-text { max-width: none; max-height: none; overflow: visible; }
+
+  /* editorial: la foto ocupa el ancho en vez de flotar en un recuadro gris */
+  .cs-slide.editorial { grid-template-rows: auto auto; align-content: center; }
+  .cs-slide.editorial .hero-img { width: 100%; height: auto !important; min-height: 0; aspect-ratio: 16 / 9; }
+
+  /* ——— fichas técnicas ——— */
+  .cs-slide.ficha { padding: 24px 20px 40px !important; }
+  .cs-slide.ficha .ficha-wrap,
+  .cs-slide.ficha .ficha-header,
+  .cs-slide.ficha .ficha-body,
+  .cs-slide.ficha .ficha-flat,
+  .cs-slide.ficha .ficha-side { min-width: 0; max-width: 100%; }
+  .cs-slide.ficha .ficha-header,
+  .cs-slide.ficha .ficha-body,
+  .cs-slide.ficha .ficha-side { grid-template-columns: minmax(0, 1fr) !important; }
+  .cs-slide.ficha .desc,
+  .cs-slide.ficha .fm-note { text-align: left !important; hyphens: auto; }
+
+  /* dibujo plano: tamaño según la proporción real del dibujo, puntos numerados y leyenda debajo */
+  .cs-slide.ficha .flat-views,
+  .cs-slide.ficha .flat-views:has(.flat-img-box[data-eq]),
+  .cs-slide.ficha .flat-views:has(.flat-img-box[data-fit]) {
+    padding: 8px 0 !important; height: auto !important;
+    flex-direction: column; align-items: stretch; gap: 32px;
+  }
+  .cs-slide.ficha .flat-view { width: 100%; max-width: none; margin: 0; display: flex; flex-direction: column; align-items: center; }
+  .cs-slide.ficha .ficha-body .flat-views .flat-view .flat-img-box,
+  .cs-slide.ficha .flat-img-box {
+    aspect-ratio: var(--ar, 3 / 4);
+    height: min(52vh, calc((100vw - 40px) / (var(--ar, 0.75)))) !important;
+    width: auto !important; max-width: 100%;
+    counter-reset: anno;
+  }
+  .cs-slide.ficha .flat-img-box img { width: 100% !important; height: 100% !important; object-fit: contain; }
+  .cs-slide.ficha .flat-anno-label,
+  .cs-slide.ficha .flat-anno-svg { display: none; }
+  .cs-slide.ficha .flat-anno-dot {
+    counter-increment: anno;
+    width: 18px; height: 18px; display: grid; place-items: center;
+    color: #fff; font: 500 9px/1 'DM Mono', monospace;
+    box-shadow: 0 0 0 2px rgba(237, 232, 223, .9);
+  }
+  .cs-slide.ficha .flat-anno-dot::after { content: counter(anno); }
+  .flat-legend {
+    display: grid; gap: 8px; width: 100%;
+    list-style: none; margin: 16px 0 0; padding: 14px 0 0;
+    border-top: 1px solid var(--line-soft);
+    counter-reset: legend;
+  }
+  .flat-legend li {
+    counter-increment: legend;
+    display: grid; grid-template-columns: 18px 1fr; gap: 10px; align-items: start;
+    font-family: 'DM Mono', monospace; font-size: 10px; line-height: 1.5;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .flat-legend li::before {
+    content: counter(legend);
+    width: 18px; height: 18px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-size: 9px; letter-spacing: 0;
+  }
+
+  /* orden operacional: dos columnas legibles */
+  .cs-slide.ficha .fo-grid,
+  .cs-slide.ficha .fo-grid.fo-compact { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; column-gap: 16px; }
+  .cs-slide.ficha .fo-grid li,
+  .cs-slide.ficha .fo-grid.fo-compact li { padding-left: 0 !important; border-left: 0 !important; min-width: 0; }
+
+  /* tabla de medidas: se desplaza a los lados dentro de su recuadro */
+  .cs-slide.ficha .fm-table-wrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* vistas de detalle: cuadrícula de dos */
+  .cs-slide.ficha .fg-row { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  .cs-slide.ficha .fg-row[data-n="1"] { grid-template-columns: minmax(0, 1fr); }
+  .cs-slide.ficha .fg-row figure { flex: none !important; max-width: none !important; min-width: 0; margin: 0; }
+  .cs-slide.ficha .fg-img { height: auto !important; aspect-ratio: 1; }
+  .cs-slide.ficha .fg-img img { width: 100%; height: 100%; object-fit: contain; }
+  .cs-slide.ficha .fg-row figcaption { font-size: 9px; letter-spacing: .12em; }
+
+  /* propuesta gráfica: texto arriba a todo el ancho, ilustración grande debajo */
+  .cs-slide.ficha .esc-wrap {
+    grid-template-columns: minmax(0, 1fr) !important; padding-inline: 0 !important;
+    height: auto !important; gap: 24px;
+  }
+  .cs-slide.ficha .esc-stage,
+  .cs-slide.ficha .esc-frame { width: 100%; height: auto !important; max-height: none; }
+  .cs-slide.ficha .esc-frame img,
+  .cs-slide.ficha .esc-video { width: 100%; height: auto !important; max-height: none; }
+}
