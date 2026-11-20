@@ -153,3 +153,30 @@
   .cs-slide.ficha .esc-frame img,
   .cs-slide.ficha .esc-video { width: 100%; height: auto !important; max-height: none; }
 }
+
+/* ——— figurines con espalda (line up) en pantallas táctiles ———
+   El botón "Espalda" flotaba sobre la cabeza del figurín. En su lugar, un interruptor
+   Frente / Espalda debajo del número, y tocar el figurín también lo voltea.
+   Además se quita el zoom de escritorio, que en celular quedaba pegado después de tocar. */
+.lk-faces { display: none; }
+@media (hover: none), (max-width: 720px) {
+  .cs-slide.lineup .look:hover,
+  .cs-slide.lineup .looks.big .look:hover { transform: none !important; filter: none !important; }
+  .cs-slide.lineup .look { cursor: default; }
+  .cs-slide.lineup .look.has-back { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .cs-slide.lineup .look.has-back .lk-flip,
+  .cs-slide.lineup .look.has-back .lk-sub { display: none; }
+  .cs-slide.lineup .looks:has(.has-back) { row-gap: 72px; }
+  .cs-slide.lineup .look.has-back .lk-num { gap: 8px; top: calc(100% + 10px); bottom: auto; }
+  .cs-slide.lineup .look.has-back .lk-faces {
+    display: inline-flex; gap: 2px; padding: 2px;
+    border: 1px solid var(--line-soft); border-radius: 999px; background: var(--paper);
+  }
+  .lk-face {
+    font: 400 9px/1 'DM Mono', monospace; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); background: none; border: 0; border-radius: 999px;
+    padding: 8px 12px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: background .2s, color .2s;
+  }
+  .lk-face.is-on { background: var(--ink); color: var(--paper); }
+}

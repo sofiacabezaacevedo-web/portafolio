@@ -160,7 +160,7 @@
           <div class="head">— Ilustraciones</div>
           <h3>${s.heading}</h3>
           <div class="looks${s.looks.length > 6 ? ' big' : ''}">
-            ${s.looks.map((it, i) => { const url = typeof it === 'string' ? it : it.src; const num = typeof it === 'string' ? ('L0' + (i + 1)) : it.num; if (typeof it === 'object' && it.back) { return `<div class="look has-back" style="background-image:url('${it.src}')" data-front="${it.src}" data-back="${it.back}"><button class="lk-flip" type="button" aria-label="Ver espalda"><span class="lk-flip-ico">⟳</span> Espalda</button><span class="lk-num">${num}<span class="lk-sub" data-face>Frente</span></span></div>`; } const sub = (typeof it === 'object' && it.sub) ? `<span class="lk-sub">${it.sub}</span>` : ''; return `<div class="look" style="background-image:url('${url}')"><span class="lk-num">${num}${sub}</span></div>`; }).join('')}
+            ${s.looks.map((it, i) => { const url = typeof it === 'string' ? it : it.src; const num = typeof it === 'string' ? ('L0' + (i + 1)) : it.num; if (typeof it === 'object' && it.back) { return `<div class="look has-back" style="background-image:url('${it.src}')" data-front="${it.src}" data-back="${it.back}"><button class="lk-flip" type="button" aria-label="Ver espalda"><span class="lk-flip-ico">⟳</span> Espalda</button><span class="lk-num">${num}<span class="lk-sub" data-face>Frente</span><span class="lk-faces" role="group" aria-label="Vista del figurín"><button class="lk-face is-on" type="button" data-show="front" aria-pressed="true">Frente</button><button class="lk-face" type="button" data-show="back" aria-pressed="false">Espalda</button></span></span></div>`; } const sub = (typeof it === 'object' && it.sub) ? `<span class="lk-sub">${it.sub}</span>` : ''; return `<div class="look" style="background-image:url('${url}')"><span class="lk-num">${num}${sub}</span></div>`; }).join('')}
           </div>
         `;
       case 'movimiento':
@@ -614,15 +614,24 @@
       if (card.dataset.bound === '1') return;
       card.dataset.bound = '1';
       const btn = card.querySelector('.lk-flip');
-      const face = card.querySelector('[data-face]');
+      const face = card.querySelector('.lk-sub[data-face]');
+      const toggles = card.querySelectorAll('.lk-face');
       let back = false;
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        back = !back;
+      const show = (isBack) => {
+        back = isBack;
         card.style.backgroundImage = `url('${back ? card.dataset.back : card.dataset.front}')`;
         if (face) face.textContent = back ? 'Espalda' : 'Frente';
         btn.lastChild.textContent = back ? ' Frente' : ' Espalda';
-      });
+        toggles.forEach((t) => {
+          const on = (t.dataset.show === 'back') === back;
+          t.classList.toggle('is-on', on);
+          t.setAttribute('aria-pressed', String(on));
+        });
+      };
+      btn.addEventListener('click', (e) => { e.stopPropagation(); show(!back); });
+      toggles.forEach((t) => t.addEventListener('click', (e) => { e.stopPropagation(); show(t.dataset.show === 'back'); }));
+      // En pantallas táctiles, tocar el figurín también lo voltea.
+      card.addEventListener('click', () => { if (matchMedia('(hover: none)').matches) show(!back); });
     });
   }
 
